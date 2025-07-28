@@ -5,11 +5,14 @@ import RootLayout from "../layouts/RootLayout";
 import Home from "../pages/home/Home";
 import Login from "../pages/login/Login";
 import SignUp from "../pages/signUp/SignUp";
+import AuthLayout from "../layouts/AuthLayout";
+import Error from "../pages/sheard/error";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    Component:RootLayout,
+    Component:AuthLayout,
+    errorElement: <Error></Error>,
     children: [
         {
             index: true,
@@ -25,4 +28,5 @@ export const router = createBrowserRouter([
         }
     ]
   },
+  
 ]);
