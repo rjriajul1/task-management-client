@@ -4,29 +4,51 @@ import { Link } from "react-router";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import successImg from '../../assets/success_img.png'
+import { toast } from "react-toastify";
 const SignUp = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const axiosSecure = useAxiosSecure()
-  const handleForm = async(e) => {
+  const [error, setError] = useState("");
+  const axiosSecure = useAxiosSecure();
+  const handleForm = async (e) => {
+    setError("");
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const info = Object.fromEntries(formData.entries());
-    const { password, confirmPassword,name,email } = info;
+    const { password, confirmPassword, name, email } = info;
     if (password !== confirmPassword) {
-      return alert("must be same pass");
+      return setError("Must be match this password");
     }
 
     const user = {
       name,
       email,
-      password
+      password,
+    };
+
+    //save user db
+    try {
+      const res = await axiosSecure.post("/api/auth/register", user, {
+        withCredentials: true,
+      });
+
+      if (res.data.message) {
+        Swal.fire({
+          position: "top-center",
+          title: "Registration successful! Welcome aboard",
+          imageUrl: successImg, 
+          imageWidth: 300, 
+          imageHeight:300, 
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    } catch (error) {
+      toast.error(error.message);
     }
-  console.log(user);
-  //save user db
-  const res =await axiosSecure.post('/api/auth/register', user, { withCredentials: true });  
-console.log(res);
   };
   return (
     <div>
@@ -79,7 +101,7 @@ console.log(res);
             <br />
             <div className="relative">
               <input
-                className="border w-full border-gray-200 rounded-md p-2 shadow-md mt-2"
+                className="border w-full mb-7 border-gray-200 rounded-md p-2 shadow-md mt-2"
                 name="password"
                 type={showPassword ? "text" : "password"}
                 defaultValue="63546142"
@@ -97,8 +119,8 @@ console.log(res);
               </div>
             </div>
             {/* confirm Password */}
-            <label htmlFor="Password" className="font-semibold">
-              Password
+            <label htmlFor="confirmPassword" className="font-semibold">
+              Confirm Password
             </label>
             <br />
             <div className="relative">
@@ -109,6 +131,7 @@ console.log(res);
                 defaultValue="63546142"
                 required
               />
+              <p className="text-red-500 text-center mt-3">{error}</p>
               <div
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute top-4 right-4"

@@ -4,22 +4,41 @@ import { Link } from "react-router";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { toast } from "react-toastify";
+import successImg from '../../assets/success_img.png'
+import Swal from "sweetalert2";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const axiosSecure = useAxiosSecure()
-  const handleForm = async(e) => {
+  const axiosSecure = useAxiosSecure();
+  const handleForm = async (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
     const user = {
       email,
-      password
+      password,
+    };
+  
+    //save user db
+    try {
+      const res = await axiosSecure.post("/api/auth/login", user, {
+        withCredentials: true,
+      });
+      if (res.data.message) {
+        Swal.fire({
+          position: "top-center",
+          title: "Login successful! Welcome back.",
+          imageUrl: successImg,
+          imageWidth: 300,
+          imageHeight: 300,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    } catch (error) {
+      toast.error(error.message);
     }
-  console.log(user);
-  //save user db
-  const res =await axiosSecure.post('/api/auth/login', user, { withCredentials: true });  
-console.log(res);
   };
   return (
     <div>
