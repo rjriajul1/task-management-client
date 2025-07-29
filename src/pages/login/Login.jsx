@@ -3,14 +3,23 @@ import login from "../../assets/sign_in_logo.png";
 import { Link } from "react-router";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const handleForm = (e) => {
+  const axiosSecure = useAxiosSecure()
+  const handleForm = async(e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
+    const user = {
+      email,
+      password
+    }
+  console.log(user);
+  //save user db
+  const res =await axiosSecure.post('/api/auth/login', user, { withCredentials: true });  
+console.log(res);
   };
   return (
     <div>

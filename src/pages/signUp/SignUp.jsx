@@ -3,19 +3,30 @@ import signUp from "../../assets/sign_up_logo.png";
 import { Link } from "react-router";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 const SignUp = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const handleForm = (e) => {
+  const axiosSecure = useAxiosSecure()
+  const handleForm = async(e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const info = Object.fromEntries(formData.entries());
-    const { password, confirmPassword } = info;
+    const { password, confirmPassword,name,email } = info;
     if (password !== confirmPassword) {
       return alert("must be same pass");
     }
-    console.log(info);
+
+    const user = {
+      name,
+      email,
+      password
+    }
+  console.log(user);
+  //save user db
+  const res =await axiosSecure.post('/api/auth/register', user, { withCredentials: true });  
+console.log(res);
   };
   return (
     <div>
@@ -114,7 +125,7 @@ const SignUp = () => {
               type="submit"
               className="bg-[#60E5AE] w-full rounded-md p-2 mt-12 mb-6 font-plus"
             >
-              Login
+              Sign Up
             </button>
           </form>
           <div className="divider">OR</div>
