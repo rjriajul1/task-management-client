@@ -27,11 +27,17 @@ export const router = createBrowserRouter([
             path:"/signUp",
             Component:SignUp
         },
-        {
-          path:'taskList',
-          element:<TaskList></TaskList>
-        }
     ]
   },
+  {
+    path:"/dashboard",
+    element:<RootLayout></RootLayout>,
+    children:[
+      {
+        path:'taskList',
+        element:<TaskList></TaskList>
+      }
+    ]
+  }
   
 ]);
