@@ -7,6 +7,7 @@ import Login from "../pages/login/Login";
 import SignUp from "../pages/signUp/SignUp";
 import AuthLayout from "../layouts/AuthLayout";
 import Error from "../pages/sheard/error";
+import TaskList from "../pages/taskList/TaskList";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
         {
             path:"/signUp",
             Component:SignUp
+        },
+        {
+          path:'taskList',
+          element:<TaskList></TaskList>
         }
     ]
   },

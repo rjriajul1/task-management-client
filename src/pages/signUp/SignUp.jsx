@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import signUp from "../../assets/sign_up_logo.png";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -12,6 +12,7 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate()
   const handleForm = async (e) => {
     setError("");
     e.preventDefault();
@@ -45,6 +46,7 @@ const SignUp = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        navigate('/taskList')
       }
     } catch (error) {
       toast.error(error.message);
