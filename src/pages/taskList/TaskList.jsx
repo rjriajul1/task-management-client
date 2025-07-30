@@ -36,6 +36,7 @@ const TaskList = () => {
       status: "Pending",
       category: "meditation",
     },
+   
   ];
 
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -69,7 +70,7 @@ const TaskList = () => {
               <option value="family">Family</option>
               <option value="Sport">Sport</option>
               <option value="Friends">Friends</option>
-              <option value="Meditation">Development</option>
+              <option value="Meditation">Meditation</option>
             </select>
 
             {/* Status Dropdown */}

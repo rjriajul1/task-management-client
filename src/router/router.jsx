@@ -8,6 +8,8 @@ import SignUp from "../pages/signUp/SignUp";
 import AuthLayout from "../layouts/AuthLayout";
 import Error from "../pages/sheard/error";
 import TaskList from "../pages/taskList/TaskList";
+import AddTask from "../pages/addTask/AddTask";
+import TaskDetails from "../pages/taskDetails/TaskDetails";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +38,14 @@ export const router = createBrowserRouter([
       {
         path:'taskList',
         element:<TaskList></TaskList>
+      },
+      {
+        path:'addTask',
+        element:<AddTask></AddTask>
+      },
+      {
+        path:'taskDetails',
+        element:<TaskDetails></TaskDetails>
       }
     ]
   }
