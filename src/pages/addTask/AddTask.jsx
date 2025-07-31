@@ -5,17 +5,20 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import successImg from "../../assets/success_img.png";
 import { useNavigate } from "react-router";
+import { FaRoad } from "react-icons/fa";
+import imageUpload from "../../utils/imageUpload";
 
 const AddTask = () => {
   const { user } = use(AuthContext);
   const axiosSecure = useAxiosSecure();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleTaskForm = async (e) => {
     e.preventDefault();
     const form = e.target;
     const title = form.title.value;
     const category = form.category.value;
     const description = form.description.value;
+    
     const task = {
       title,
       category,
@@ -23,6 +26,7 @@ const AddTask = () => {
       description,
       status: "pending",
       email: user?.email,
+    
     };
     console.table(task);
     try {
@@ -38,7 +42,7 @@ const AddTask = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate('/dashboard/taskList')
+        navigate("/dashboard/taskList");
       }
     } catch (error) {
       toast.error(error.message);
@@ -80,7 +84,7 @@ const AddTask = () => {
               </select>
             </div>
           </div>
-          <label className="text-xl" htmlFor="category">
+          <label className="text-xl" htmlFor="description">
             Description
           </label>
           <textarea

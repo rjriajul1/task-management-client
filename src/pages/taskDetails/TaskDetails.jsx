@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdOutlineCategory } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router";
@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { deleteTask } from "../../utils/deleteTask";
 import Swal from "sweetalert2";
 import successImg from "../../assets/success_img.png";
+import { AuthContext } from "../../context/AuthContext";
 
 
 const TaskDetails = () => {
@@ -14,6 +15,7 @@ const TaskDetails = () => {
   const axiosSecure = useAxiosSecure();
   const [task, setTask] = useState([]);
   const [status,setStatus] = useState(null)
+  const {user} = use(AuthContext)
   const { id } = useParams();
   useEffect(() => {
     const fetchTask = async () => {
@@ -29,6 +31,9 @@ const TaskDetails = () => {
   console.log(task);
 
   const handleDelete = async (id) => {
+    if(user?.email !== task.email){
+      return alert('don not touch this item becaouse this item another person ')
+    }
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -51,6 +56,9 @@ const TaskDetails = () => {
   };
 
   const handleStatusChange = async (newStatus) => {
+     if(user?.email !== task.email){
+      return alert('don not touch this item becaouse this item another person ')
+    }
     try {
       const res = await axiosSecure.patch(`/api/tasks/${task._id}`, {
         status: newStatus,
@@ -66,6 +74,9 @@ const TaskDetails = () => {
   };
 
   const submitTask = async (id) => {
+     if(user?.email !== task.email){
+      return alert('don not touch this item becaouse this item another person ')
+    }
     try {
       const res = await axiosSecure.patch(`/api/tasks/done/${id}`);
       if (res.data.message) {
@@ -84,6 +95,13 @@ const TaskDetails = () => {
       console.error("Failed to mark as done", error);
     }
   };
+  const updateTask = (id) => {
+     if(user?.email !== task.email){
+      return alert('don not touch this item becaouse this item another person ')
+    }
+     navigate(`/dashboard/taskEdit/${id}`)
+      
+  }
   return (
     <div className="p-4 md:p-8">
       <div className="max-w-[1600px] -mt-24 mx-auto md:p-8 p-4 bg-base-100 shadow-md rounded-2xl">
@@ -97,11 +115,11 @@ const TaskDetails = () => {
               </p>
             )}
 
-            <Link to={`/dashboard/taskEdit/${task._id}`}>
-            <button className="btn text-orange-500 w-full md:w-auto">
+           
+            <button onClick={()=>updateTask(task?._id)} className="btn text-orange-500 w-full md:w-auto">
               Edit Task
             </button>
-            </Link>
+          
             <button
               onClick={() => navigate(-1)}
               className="btn bg-[#60E5AE] w-full md:w-auto"
