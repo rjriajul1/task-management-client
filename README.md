@@ -1,12 +1,59 @@
-# React + Vite
+# ✅ Task Management Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-featured MERN Stack task management web application built for performance, security, and usability. This project includes user authentication, task CRUD operations, protected routes, and a clean, responsive user interface.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🎯 Project Objective
 
-## Expanding the ESLint configuration
+Build a MERN web application that includes:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 🔐 User Authentication System (JWT + bcrypt)
+- ✅ Task Management Features (Add/Edit/Delete)
+- 🧑‍💻 Intuitive User Interface
+- 🛡️ Additional Security Measures
+
+---
+
+## 🚀 Live Demo
+
+👉 [Frontend Live Link](https://task-management200.netlify.app/)  
+👉 [Backend Live API](https://task-management-server-two-pi.vercel.app/)  
+👉 [Client Repo](https://github.com/rjriajul1/task-management-client)  
+👉 [Server Repo](https://github.com/rjriajul1/task-management-server)
+
+---
+
+## 🔐 Test Login Credentials
+
+- Email: `isrj173@gmail.com`
+- Password: `123456`
+
+---
+
+## 📦 Tech Stack
+
+### Frontend:
+- React.js
+- Context API (or Redux)
+- React Router
+- Tailwind CSS + DaisyUI
+
+### Backend:
+- Node.js
+- Express.js
+- MongoDB with Mongoose
+- JWT for authentication
+- bcrypt for password hashing
+- express-validator for input validation
+
+### Security:
+- Helmet (secure headers)
+- CORS configuration
+- Custom error handling middleware
+- Environment variables via `dotenv`
+
+---
+
+## 📂 Folder Structure (MVC + Clean Architecture)
+
