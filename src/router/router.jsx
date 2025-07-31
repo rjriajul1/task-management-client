@@ -11,6 +11,7 @@ import TaskList from "../pages/taskList/TaskList";
 import AddTask from "../pages/addTask/AddTask";
 import TaskDetails from "../pages/taskDetails/TaskDetails";
 import PrivateRoute from "../routes/PrivateRoute";
+import TaskEdit from "../pages/taskEdit/TaskEdit";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
       {
         path:'taskDetails/:id',
         element:<TaskDetails></TaskDetails>
+      },
+      {
+        path:'taskEdit/:id',
+        element:<TaskEdit></TaskEdit>
       }
     ]
   }

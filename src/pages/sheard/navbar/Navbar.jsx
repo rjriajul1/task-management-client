@@ -1,11 +1,13 @@
 import React, { use } from "react";
-import { NavLink } from "react-router"; // ঠিক করলাম
+import { NavLink, useLocation } from "react-router"; // ঠিক করলাম
 import img from "../../../assets/sign_in_logo.png";
 import { AuthContext } from "../../../context/AuthContext";
 import { FaAngleRight } from "react-icons/fa";
 
 const Navbar = () => {
   const { user } = use(AuthContext);
+  const location = useLocation()
+
   const links = (
     <>
       <li>
@@ -78,7 +80,12 @@ const Navbar = () => {
               {links}
             </ul>
           </div>
+          <div>
           <h1 className="text-2xl font-bold ">Tasko</h1>
+           {location.pathname === "/dashboard/taskList" && <div>
+             <h1 className="text-2xl font-semibold mt-5 text-[#05E389]">{user.name}</h1>
+            <h1 className="text-4xl font-semibold">Welcome To Dashboard</h1></div>}
+          </div>
         </div>
 
         {/* Center - Nav Links */}

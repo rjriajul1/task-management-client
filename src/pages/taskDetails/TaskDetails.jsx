@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdOutlineCategory } from "react-icons/md";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { toast } from "react-toastify";
 import { deleteTask } from "../../utils/deleteTask";
 import Swal from "sweetalert2";
-import successImg from '../../assets/success_img.png'
+import successImg from "../../assets/success_img.png";
+
 
 const TaskDetails = () => {
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const [task, setTask] = useState([]);
+  const [status,setStatus] = useState(null)
   const { id } = useParams();
   useEffect(() => {
     const fetchTask = async () => {
@@ -48,10 +50,25 @@ const TaskDetails = () => {
     });
   };
 
+  const handleStatusChange = async (newStatus) => {
+    try {
+      const res = await axiosSecure.patch(`/api/tasks/${task._id}`, {
+        status: newStatus,
+      });
+      if (res.data.modifiedCount > 0) {
+        toast.success("Status updated successfully");
+         navigate('/dashboard/taskList')
+      }
+    } catch (err) {
+      toast.error("Failed to update status");
+      console.error(err);
+    }
+  };
+
   const submitTask = async (id) => {
     try {
-      const res =  await axiosSecure.patch(`/api/tasks/done/${id}`)
-       if(res.data.message){
+      const res = await axiosSecure.patch(`/api/tasks/done/${id}`);
+      if (res.data.message) {
         Swal.fire({
           position: "top-center",
           title: "Successfully task submit.",
@@ -61,8 +78,8 @@ const TaskDetails = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-       }
-      navigate('/dashboard/taskList')
+      }
+      navigate("/dashboard/taskList");
     } catch (error) {
       console.error("Failed to mark as done", error);
     }
@@ -80,9 +97,11 @@ const TaskDetails = () => {
               </p>
             )}
 
+            <Link to={`/dashboard/taskEdit/${task._id}`}>
             <button className="btn text-orange-500 w-full md:w-auto">
               Edit Task
             </button>
+            </Link>
             <button
               onClick={() => navigate(-1)}
               className="btn bg-[#60E5AE] w-full md:w-auto"
@@ -127,7 +146,11 @@ const TaskDetails = () => {
             <label className="block mt-6 mb-2 font-semibold" htmlFor="status">
               Change Status
             </label>
-            <select className="px-4 py-2 border border-gray-300 rounded-md w-full md:w-auto">
+            <select
+              value={status} 
+              onChange={(e) => handleStatusChange(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md w-full md:w-auto"
+            >
               <option value="">All Task</option>
               <option value="Ongoing">Ongoing</option>
               <option value="Pending">Pending</option>
@@ -144,7 +167,7 @@ const TaskDetails = () => {
                 Delete
               </button>
               <button
-              disabled={task.status === "done"}
+                disabled={task.status === "done"}
                 onClick={() => submitTask(task._id)}
                 className="btn bg-[#60E5AE] px-6 md:px-12"
               >
