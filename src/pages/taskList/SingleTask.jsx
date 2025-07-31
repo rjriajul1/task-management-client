@@ -3,11 +3,34 @@ import { FaCalendarAlt, FaTrashAlt } from "react-icons/fa";
 import { MdOutlineCategory } from "react-icons/md";
 import { Link } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
+import Swal from "sweetalert2";
+import { deleteTask } from "../../utils/deleteTask";
 
 const SingleTask = ({ task }) => {
-  const { title, description, data, status , _id} = task;
- 
+  const { title, description, date, status, _id } = task;
+
   const { user } = use(AuthContext);
+
+  const handleDelete = async (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteTask(id);
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your task has been deleted.",
+          icon: "success",
+        });
+      }
+    });
+  };
 
   // Status color mapping
   const statusColor = {
@@ -38,7 +61,9 @@ const SingleTask = ({ task }) => {
             )}
           </div>
           <button className="  text-red-500 hover:text-red-700">
-            <FaTrashAlt size={26} />
+            <div onClick={() => handleDelete(_id)}>
+              <FaTrashAlt size={26} />
+            </div>
           </button>
         </div>
 
@@ -47,7 +72,17 @@ const SingleTask = ({ task }) => {
           {/* Date with Icon */}
           <div className="flex items-center gap-3">
             <img className="w-8 h-8 rounded-full" src={user?.photo} alt="" />
-            <span className="text-[#1F1F1F]">{data}</span>
+            <p className="text-gray-600 text-sm">
+              {date &&
+                new Date(date)
+                  .toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                  .replace(",", " -")}
+            </p>
           </div>
           {/* Status with dot */}
           <div
