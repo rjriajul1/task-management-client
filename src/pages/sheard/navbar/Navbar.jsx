@@ -1,12 +1,28 @@
 import React, { use } from "react";
-import { NavLink, useLocation } from "react-router"; // ঠিক করলাম
+import { NavLink, useNavigate } from "react-router";
 import img from "../../../assets/sign_in_logo.png";
 import { AuthContext } from "../../../context/AuthContext";
 import { FaAngleRight } from "react-icons/fa";
+import axios from "axios";
 
 const Navbar = () => {
-  const { user } = use(AuthContext);
-  const location = useLocation()
+  const { user, setUser } = use(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:3000/api/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+
+      setUser(null);
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
 
   const links = (
     <>
@@ -81,10 +97,15 @@ const Navbar = () => {
             </ul>
           </div>
           <div>
-          <h1 className="text-2xl font-bold ">Tasko</h1>
-           {location.pathname === "/dashboard/taskList" && <div>
-             <h1 className="text-2xl font-semibold mt-5 text-[#05E389]">{user.name}</h1>
-            <h1 className="text-4xl font-semibold">Welcome To Dashboard</h1></div>}
+            <h1 className="text-2xl font-bold ">Tasko</h1>
+            {location.pathname === "/dashboard/taskList" && (
+              <div>
+                <h1 className="text-2xl font-semibold mt-5 text-[#05E389]">
+                  {user.name}
+                </h1>
+                <h1 className="text-4xl font-semibold">Welcome To Dashboard</h1>
+              </div>
+            )}
           </div>
         </div>
 
@@ -114,7 +135,9 @@ const Navbar = () => {
                   tabIndex={0}
                   className="dropdown-content menu mt-10 -ml-20 text-black bg-base-100 rounded-box z-1 w-52 p-6 shadow-sm"
                 >
-                  <button className="btn ">Log Out</button>
+                  <button onClick={handleLogout} className="btn ">
+                    Log Out
+                  </button>
                 </div>
               </div>
             </div>
