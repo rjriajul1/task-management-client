@@ -1,21 +1,48 @@
-import React from "react";
+import React, { use } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import successImg from "../../assets/success_img.png";
+import { useNavigate } from "react-router";
 
 const AddTask = () => {
-  const handleTaskForm = (e) => {
+  const { user } = use(AuthContext);
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate()
+  const handleTaskForm = async (e) => {
     e.preventDefault();
     const form = e.target;
     const title = form.title.value;
     const category = form.category.value;
     const description = form.description.value;
     const task = {
-        title,
-        category,
-        date: new Date().toISOString(),
-        description,
-        status: "pending"
-        
-    }
+      title,
+      category,
+      date: new Date().toISOString(),
+      description,
+      status: "pending",
+      email: user?.email,
+    };
     console.table(task);
+    try {
+      const res = await axiosSecure.post("/api/tasks", task);
+      console.log(res.data);
+      if (res.data.message) {
+        Swal.fire({
+          position: "top-center",
+          title: " successfully post task and show success message",
+          imageUrl: successImg,
+          imageWidth: 300,
+          imageHeight: 300,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate('/dashboard/taskList')
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   return (
     <div className="max-w-[1600px] -mt-20  mx-auto p-4 md:p-8">
