@@ -1,52 +1,69 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import signUp from "../../assets/sign_up_logo.png";
 import { Link, useNavigate } from "react-router";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+
 import Swal from "sweetalert2";
-import successImg from '../../assets/success_img.png'
+import successImg from "../../assets/success_img.png";
 import { toast } from "react-toastify";
+import imageUpload from "../../utils/imageUpload";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { AuthContext } from "../../context/AuthContext";
 const SignUp = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const axiosSecure = useAxiosSecure();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { loadUser } = use(AuthContext);
+  const [email, setEmail] = useState(null);
+
   const handleForm = async (e) => {
     setError("");
+    setLoading(true);
     e.preventDefault();
     const form = e.target;
-    const formData = new FormData(form);
-    const info = Object.fromEntries(formData.entries());
-    const { password, confirmPassword, name, email } = info;
+    const name = form.name.value;
+    const photo = form.photo.files[0];
+    const password = form.password.value;
+    const confirmPassword = form.confirmPassword.value;
+
     if (password !== confirmPassword) {
       return setError("Must be match this password");
     }
+
+    const image = await imageUpload(photo);
 
     const user = {
       name,
       email,
       password,
+      photo: image,
     };
+    console.log(user);
 
-    //save user db
+    // //save user db
     try {
       const res = await axiosSecure.post("/api/auth/register", user, {
         withCredentials: true,
       });
-
+      console.log(res);
       if (res.data.message) {
         Swal.fire({
           position: "top-center",
           title: "Registration successful! Welcome aboard",
-          imageUrl: successImg, 
-          imageWidth: 300, 
-          imageHeight:300, 
+          imageUrl: successImg,
+          imageWidth: 300,
+          imageHeight: 300,
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate('/taskList')
+        navigate("/dashboard/taskList");
+        setLoading(false);
+        localStorage.setItem("userEmail", email);
+        await loadUser(email);
       }
     } catch (error) {
       toast.error(error.message);
@@ -82,6 +99,17 @@ const SignUp = () => {
               required
               placeholder="Enter your full name"
             />
+            {/* photo */}
+            <label htmlFor="photo" className="font-semibold ">
+              Photo
+            </label>
+            <br />
+            <input
+              className="border w-full border-gray-200 rounded-md p-2 shadow-md mt-2 mb-7"
+              name="photo"
+              type="file"
+              required
+            />
 
             {/* email field */}
             <label htmlFor="Email" className="font-semibold ">
@@ -90,7 +118,8 @@ const SignUp = () => {
             <br />
             <input
               className="border w-full border-gray-200 rounded-md p-2 shadow-md mt-2 mb-7"
-              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               type="email"
               required
               placeholder="r2547@gmail.com"
@@ -150,7 +179,7 @@ const SignUp = () => {
               type="submit"
               className="bg-[#60E5AE] w-full rounded-md p-2 mt-12 mb-6 font-plus"
             >
-              Sign Up
+              {loading ? "loading....." : "SignUp"}
             </button>
           </form>
           <div className="divider">OR</div>

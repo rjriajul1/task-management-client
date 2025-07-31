@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import login from "../../assets/sign_in_logo.png";
 import { Link, useNavigate } from "react-router";
 import { FaRegEyeSlash } from "react-icons/fa";
@@ -7,14 +7,16 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { toast } from "react-toastify";
 import successImg from '../../assets/success_img.png'
 import Swal from "sweetalert2";
+import { AuthContext } from "../../context/AuthContext";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate()
+  const [email,setEmail] = useState(null)
+  const {loadUser} = use(AuthContext)
   const handleForm = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const email = form.email.value;
     const password = form.password.value;
     const user = {
       email,
@@ -36,7 +38,9 @@ const Login = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate('/taskList')
+        navigate('/dashboard/taskList')
+        localStorage.setItem("userEmail", email);
+        await loadUser(email)
       }
     } catch (error) {
       toast.error(error.message);
@@ -67,7 +71,8 @@ const Login = () => {
             <br />
             <input
               className="border w-full border-gray-200 rounded-md p-2 shadow-md mt-2 mb-7"
-              name="email"
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
               type="email"
               required
               placeholder="r2547@gmail.com"
