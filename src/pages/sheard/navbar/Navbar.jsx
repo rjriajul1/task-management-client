@@ -12,7 +12,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:3000/api/auth/logout",
+        "https://task-management-server-two-pi.vercel.app/api/auth/logout",
         {},
         { withCredentials: true }
       );
