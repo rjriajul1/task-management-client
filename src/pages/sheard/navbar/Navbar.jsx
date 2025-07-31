@@ -1,8 +1,11 @@
-import React from "react";
+import React, { use } from "react";
 import { NavLink } from "react-router"; // ঠিক করলাম
 import img from "../../../assets/sign_in_logo.png";
+import { AuthContext } from "../../../context/AuthContext";
+import { FaAngleRight } from "react-icons/fa";
 
 const Navbar = () => {
+  const { user } = use(AuthContext);
   const links = (
     <>
       <li>
@@ -85,7 +88,32 @@ const Navbar = () => {
 
         {/* Right - Button */}
         <div className="navbar-end">
-          <a className="btn ">Button</a>
+          {user ? (
+            <div className="flex items-center gap-4 ">
+              <div>
+                <img
+                  className="w-8 h-8 rounded-full object-cover"
+                  src={user?.photo}
+                  alt=""
+                />
+              </div>
+
+              <div className="dropdown dropdown-start flex">
+                <p className="font-semibold text-[18px]">{user?.name}</p>
+                <div tabIndex={0} role="button" className=" m-1">
+                  <FaAngleRight size={20} />
+                </div>
+                <div
+                  tabIndex={0}
+                  className="dropdown-content menu mt-10 -ml-20 text-black bg-base-100 rounded-box z-1 w-52 p-6 shadow-sm"
+                >
+                  <button className="btn ">Log Out</button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

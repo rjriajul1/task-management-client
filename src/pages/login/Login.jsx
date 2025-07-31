@@ -41,6 +41,7 @@ const Login = () => {
         navigate('/dashboard/taskList')
         localStorage.setItem("userEmail", email);
         await loadUser(email)
+       
       }
     } catch (error) {
       toast.error(error.message);

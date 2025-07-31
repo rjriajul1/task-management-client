@@ -1,10 +1,12 @@
-import React from "react";
+import React, { use } from "react";
 import { FaCalendarAlt, FaTrashAlt } from "react-icons/fa";
 import { MdOutlineCategory } from "react-icons/md";
 import { Link } from "react-router";
+import { AuthContext } from "../../context/AuthContext";
 
 const SingleTask = ({ task }) => {
   const { title, des, data, status } = task;
+  const {user} = use(AuthContext)
 
   // Status color mapping
   const statusColor = {
@@ -39,7 +41,7 @@ const SingleTask = ({ task }) => {
         <div className="flex justify-between items-center text-sm text-gray-500 py-4">
           {/* Date with Icon */}
           <div className="flex items-center gap-3">
-            <FaCalendarAlt size={26} />
+          <img className="w-8 h-8 rounded-full" src={user?.photo} alt="" />
             <span className="text-[#1F1F1F]">{data}</span>
           </div>
           {/* Status with dot */}

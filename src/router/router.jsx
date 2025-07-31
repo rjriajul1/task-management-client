@@ -10,6 +10,7 @@ import Error from "../pages/sheard/error";
 import TaskList from "../pages/taskList/TaskList";
 import AddTask from "../pages/addTask/AddTask";
 import TaskDetails from "../pages/taskDetails/TaskDetails";
+import PrivateRoute from "../routes/PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -33,7 +34,7 @@ export const router = createBrowserRouter([
   },
   {
     path:"/dashboard",
-    element:<RootLayout></RootLayout>,
+    element:<PrivateRoute><RootLayout></RootLayout></PrivateRoute>,
     children:[
       {
         path:'taskList',
