@@ -1,18 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdOutlineCategory } from "react-icons/md";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { toast } from "react-toastify";
 
 const TaskDetails = () => {
- const navigate = useNavigate()
-  const task = {
-    id: 4,
-    title: "ksfahfjhafhha",
-    data: "7-5-2025",
-    des: "sjfhajfjahfhha",
-    status: "Pending",
-    category: "meditation",
-  };
+  const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
+  const [task, setTask] = useState([]);
+  const {id}= useParams()
+  useEffect(() => {
+    const fetchTask = async () => {
+      try {
+        const res = await axiosSecure.get(`/api/tasks/${id}`);
+        setTask(res.data);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+    fetchTask();
+  }, [axiosSecure,id]);
+  console.log(task);
   return (
     <div className="p-4 md:p-8">
       <div className="max-w-[1600px] -mt-24 mx-auto md:p-8 p-4 bg-base-100 shadow-md rounded-2xl">
@@ -23,7 +32,12 @@ const TaskDetails = () => {
             <button className="btn text-orange-500 w-full md:w-auto">
               Edit Task
             </button>
-            <button onClick={()=>navigate(-1)} className="btn bg-[#60E5AE] w-full md:w-auto">Back</button>
+            <button
+              onClick={() => navigate(-1)}
+              className="btn bg-[#60E5AE] w-full md:w-auto"
+            >
+              Back
+            </button>
           </div>
         </div>
 
@@ -44,9 +58,7 @@ const TaskDetails = () => {
           <div className="w-full">
             <h1 className="text-2xl md:text-3xl font-semibold">{task.title}</h1>
             <p className="text-sm md:text-xs py-2">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. In magni
-              blanditiis eius voluptatum earum, recusandae hic nulla accusamus
-              enim mollitia.
+              {task.description}
             </p>
 
             <h2 className="mt-6 mb-2 font-semibold text-base md:text-lg">

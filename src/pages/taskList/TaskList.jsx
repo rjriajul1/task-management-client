@@ -1,43 +1,23 @@
-import React, { useState } from "react";
+import React, {  useEffect, useState } from "react";
 import SingleTask from "./singleTask";
 import notFoundImg from "../../assets/not_found.png";
 import { Link } from "react-router";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { toast } from "react-toastify";
 const TaskList = () => {
-  const tasks = [
-    {
-      id: 1,
-      title: "ksfahfjhafhha",
-      data: "7-5-2025",
-      des: "sjfhajfjahfhha",
-      status: "pending",
-      category: "family",
-    },
-    {
-      id: 2,
-      title: "ksfahfjhafhha",
-      data: "7-5-2025",
-      des: "sjfhajfjahfhha",
-      status: "pending",
-      category: "sport",
-    },
-    {
-      id: 3,
-      title: "ksfahfjhafhha",
-      data: "7-5-2025",
-      des: "sjfhajfjahfhha",
-      status: "pending",
-      category: "nature",
-    },
-    {
-      id: 4,
-      title: "ksfahfjhafhha",
-      data: "7-5-2025",
-      des: "sjfhajfjahfhha",
-      status: "Pending",
-      category: "meditation",
-    },
-   
-  ];
+  const axiosSecure = useAxiosSecure()
+const [tasks,setTasks] = useState([])
+useEffect(()=>{
+  const fetchTask = async () => {
+    try{
+      const res = await axiosSecure.get('/api/tasks')
+      setTasks(res.data);
+    }catch(error){
+      toast.error(error.message);
+    }
+  }
+  fetchTask()
+},[axiosSecure])
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -109,7 +89,7 @@ const TaskList = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
             {filteredTasks.map((task) => (
-              <SingleTask key={task.id} task={task}></SingleTask>
+              <SingleTask key={task._id} task={task}></SingleTask>
             ))}
           </div>
         )}

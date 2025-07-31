@@ -5,8 +5,9 @@ import { Link } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
 
 const SingleTask = ({ task }) => {
-  const { title, des, data, status } = task;
-  const {user} = use(AuthContext)
+  const { title, description, data, status , _id} = task;
+ 
+  const { user } = use(AuthContext);
 
   // Status color mapping
   const statusColor = {
@@ -16,8 +17,8 @@ const SingleTask = ({ task }) => {
     done: "text-green-800",
   };
   return (
-    <Link to="/dashboard/taskDetails">
-      <div className=" bg-white rounded-xl border border-gray-200 shadow-md p-4 w-full max-w-sm">
+    <Link to={`/dashboard/taskDetails/${_id}`}>
+      <div className=" bg-white rounded-xl min-h-56 overflow-hidden border border-gray-200 shadow-md p-4 w-full max-w-sm">
         {/* Icon + Title */}
         <div className="flex justify-evenly items-start gap-4">
           <div className=" rounded-full">
@@ -30,7 +31,11 @@ const SingleTask = ({ task }) => {
           <div>
             <h2 className="text-2xl font-semibold">{title}</h2>
             {/* Description */}
-            <p className="text-[#667085] text-sm leading-12 ">{des}</p>
+            {description && (
+              <p className="text-[#667085] text-sm leading-7">
+                {description.split(" ").slice(0, 25).join(" ") + "..."}
+              </p>
+            )}
           </div>
           <button className="  text-red-500 hover:text-red-700">
             <FaTrashAlt size={26} />
@@ -41,7 +46,7 @@ const SingleTask = ({ task }) => {
         <div className="flex justify-between items-center text-sm text-gray-500 py-4">
           {/* Date with Icon */}
           <div className="flex items-center gap-3">
-          <img className="w-8 h-8 rounded-full" src={user?.photo} alt="" />
+            <img className="w-8 h-8 rounded-full" src={user?.photo} alt="" />
             <span className="text-[#1F1F1F]">{data}</span>
           </div>
           {/* Status with dot */}
